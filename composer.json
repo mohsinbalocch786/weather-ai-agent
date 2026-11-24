@@ -2,8 +2,8 @@
     "$schema": "https://getcomposer.org/schema.json",
     "name": "laravel/laravel",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "description": "A weather chat assistant: Laravel AI SDK agent with tool calling, a local Ollama model and the Open-Meteo API.",
+    "keywords": ["laravel", "ai", "agent", "ollama", "open-meteo", "weather", "tool-calling"],
     "license": "MIT",
     "require": {
         "php": "^8.3",
@@ -46,9 +46,11 @@
             "@php artisan dev"
         ],
         "test": [
+            "@putenv XDEBUG_MODE=off",
             "@php artisan config:clear --ansi @no_additional_args",
             "@php artisan test"
         ],
+        "test:js": "node --test tests/js/*.test.js",
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"

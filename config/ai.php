@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => 'openai',
+    'default' => 'ollama',
     'default_for_images' => 'gemini',
     'default_for_audio' => 'openai',
     'default_for_transcription' => 'openai',
@@ -38,6 +38,21 @@ return [
             'store' => env('CACHE_STORE', 'database'),
             'individually' => true,
         ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Conversations
+    |--------------------------------------------------------------------------
+    |
+    | Title generation costs an extra model call per new conversation, which
+    | is slow on a small local model. When disabled the SDK uses the first
+    | message, truncated to 50 characters.
+    |
+    */
+
+    'conversations' => [
+        'generate_title' => (bool) env('AI_GENERATE_CONVERSATION_TITLES', false),
     ],
 
     /*
@@ -125,6 +140,21 @@ return [
             'driver' => 'ollama',
             'key' => env('OLLAMA_API_KEY', ''),
             'url' => env('OLLAMA_URL', 'http://localhost:11434'),
+            'models' => [
+                'text' => [
+                    'default' => env('OLLAMA_MODEL','qwen2.5:3b'),
+                ],
+            ],
+        ],
+        'ollama-cloud' => [
+            'driver' => 'openai-compatible',
+            'url' => 'https://ollama.com/v1',
+            'key' => env('OLLAMA_API_KEY'),
+            'models' => [
+                'text' => [
+                    'default' => env('OLLAMA_MODEL', 'gpt-oss'),
+                ],
+            ],
         ],
 
         'openai' => [
