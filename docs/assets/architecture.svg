@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="590" viewBox="0 0 1200 590" role="img" aria-labelledby="title description">
+  <title id="title">Weather AI Agent architecture</title>
+  <desc id="description">A browser sends chat messages to Laravel, which streams through the Laravel AI SDK to a local Ollama model. The model calls PHP weather tools, which use weather services and Open-Meteo. The answer returns to the browser as server-sent events.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f8fbff"/>
+      <stop offset="1" stop-color="#edf3fb"/>
+    </linearGradient>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0 0 10 5 0 10z" fill="#62748c"/>
+    </marker>
+    <marker id="arrow-accent" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0 0 10 5 0 10z" fill="#4a68dc"/>
+    </marker>
+    <style>
+      text { font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
+      .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 1.7px; }
+      .heading { font-size: 17px; font-weight: 700; fill: #18263c; }
+      .body { font-size: 13px; fill: #56677f; }
+      .card { fill: #fff; stroke: #d7e1ef; stroke-width: 1.5; }
+      .link { fill: none; stroke: #718198; stroke-width: 2; marker-end: url(#arrow); }
+      .return { fill: none; stroke: #4a68dc; stroke-width: 2; stroke-dasharray: 6 6; marker-end: url(#arrow-accent); }
+    </style>
+  </defs>
+  <rect width="1200" height="590" rx="24" fill="url(#background)"/>
+  <text x="44" y="52" class="eyebrow" fill="#536782">WEATHER AI AGENT</text>
+  <text x="44" y="83" font-size="26" font-weight="750" fill="#15243a">From a question to a live weather answer</text>
+
+  <rect x="34" y="112" width="1132" height="165" rx="18" fill="#fff" fill-opacity=".72" stroke="#dce5f0"/>
+  <text x="56" y="140" class="eyebrow" fill="#687b94">CHAT AND MODEL</text>
+
+  <g>
+    <rect class="card" x="54" y="158" width="186" height="92" rx="13"/>
+    <rect x="54" y="158" width="5" height="92" rx="2.5" fill="#4d7bf2"/>
+    <text x="72" y="189" class="heading">Browser</text>
+    <text x="72" y="212" class="body">Bootstrap UI · chat.js</text>
+    <text x="72" y="232" class="body">SSE in, message out</text>
+
+    <rect class="card" x="284" y="158" width="186" height="92" rx="13"/>
+    <rect x="284" y="158" width="5" height="92" rx="2.5" fill="#6974e8"/>
+    <text x="302" y="189" class="heading">Laravel HTTP</text>
+    <text x="302" y="212" class="body">ChatController</text>
+    <text x="302" y="232" class="body">validates the request</text>
+
+    <rect class="card" x="514" y="158" width="186" height="92" rx="13"/>
+    <rect x="514" y="158" width="5" height="92" rx="2.5" fill="#815fdf"/>
+    <text x="532" y="189" class="heading">WeatherChat</text>
+    <text x="532" y="212" class="body">Conversation + stream</text>
+    <text x="532" y="232" class="body">SDK events → UI events</text>
+
+    <rect class="card" x="744" y="158" width="186" height="92" rx="13"/>
+    <rect x="744" y="158" width="5" height="92" rx="2.5" fill="#9b5bca"/>
+    <text x="762" y="189" class="heading">Laravel AI SDK</text>
+    <text x="762" y="212" class="body">WeatherAssistant</text>
+    <text x="762" y="232" class="body">tool-call coordinator</text>
+
+    <rect x="974" y="158" width="186" height="92" rx="13" fill="#202738" stroke="#202738"/>
+    <text x="992" y="189" font-size="17" font-weight="700" fill="#fff">Ollama · local</text>
+    <text x="992" y="212" font-size="13" fill="#d2d9e7">qwen2.5:3b</text>
+    <text x="992" y="232" font-size="13" fill="#d2d9e7">chooses a tool or answers</text>
+  </g>
+
+  <path class="link" d="M240 204h37"/>
+  <path class="link" d="M470 204h37"/>
+  <path class="link" d="M700 204h37"/>
+  <path d="M930 204h37" fill="none" stroke="#718198" stroke-width="2" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+
+  <rect x="34" y="306" width="1132" height="200" rx="18" fill="#fff" fill-opacity=".72" stroke="#dce5f0"/>
+  <text x="56" y="334" class="eyebrow" fill="#687b94">WEATHER TOOL EXECUTION</text>
+
+  <g>
+    <rect class="card" x="90" y="354" width="218" height="92" rx="13"/>
+    <text x="110" y="384" class="heading">PHP weather tools</text>
+    <text x="110" y="407" class="body">Validate structured inputs</text>
+    <text x="110" y="427" class="body">Current · Forecast · Compare</text>
+
+    <rect class="card" x="364" y="354" width="218" height="92" rx="13"/>
+    <text x="384" y="384" class="heading">Weather services</text>
+    <text x="384" y="407" class="body">Normalize conditions</text>
+    <text x="384" y="427" class="body">PHP computes comparisons</text>
+
+    <rect class="card" x="638" y="354" width="218" height="92" rx="13"/>
+    <text x="658" y="384" class="heading">OpenMeteoClient</text>
+    <text x="658" y="407" class="body">HTTP, timeout and retries</text>
+    <text x="658" y="427" class="body">Geocoding + forecast data</text>
+
+    <rect class="card" x="912" y="354" width="218" height="92" rx="13"/>
+    <text x="932" y="384" class="heading">Open-Meteo</text>
+    <text x="932" y="407" class="body">Geocoding API</text>
+    <text x="932" y="427" class="body">Forecast API</text>
+  </g>
+
+  <path class="link" d="M308 400h49"/>
+  <path class="link" d="M582 400h49"/>
+  <path class="link" d="M856 400h49"/>
+  <path class="link" d="M837 250v63q0 12-12 12H200v21"/>
+  <text x="572" y="321" font-size="12" font-weight="600" fill="#536782">SDK dispatches structured tool call</text>
+  <path class="return" d="M1022 446v30q0 12-12 12H200v-34"/>
+  <text x="554" y="477" font-size="12" font-weight="600" fill="#4a68dc">weather result returns through the tool → model → streamed answer</text>
+  <path class="return" d="M607 250v14q0 12-12 12H147q-12 0-12-12v-14"/>
+  <text x="335" y="291" font-size="12" font-weight="600" fill="#4a68dc">SSE response to browser</text>
+</svg>

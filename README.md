@@ -13,6 +13,14 @@ Ask things like:
 - *"Will it rain in London tomorrow?"* → daily forecast
 - *"Is it warmer in Mumbai or Paris?"* → side-by-side comparison, computed in PHP
 
+## See it in action
+
+![Weather AI Agent chat interface](docs/assets/weather-ai-agent.png)
+
+The live demo below shows current weather, a forecast, and a city comparison:
+
+![Live demo: current weather, forecast, and city comparison](docs/assets/demo.gif)
+
 ## Highlights
 
 - **Tool calling with a 3B model.** Three tools with schemas and descriptions tuned so a small local model picks the right one (see [limitations](#known-limitations) for how reliably).
@@ -50,6 +58,20 @@ sequenceDiagram
     W-->>B: SSE: tool, tool_done, text…, conversation, done
 ```
 
+![Weather AI Agent architecture: browser, Laravel, Ollama, weather tools, and Open-Meteo](docs/assets/architecture.svg)
+
+### How AI tool calling works
+
+The model does not fetch weather or run application code itself. The Laravel AI SDK coordinates a tool-call loop between the local model and the app:
+
+1. **The app sends context and available tools.** `WeatherAssistant` sends the latest user message, a short conversation history, and each tool's name, description, and input schema to Ollama.
+2. **The model chooses an action.** For a weather question, `qwen2.5:3b` can return a structured call such as `GetWeatherForecast(city: "London", days: 2)` instead of a final answer.
+3. **Laravel executes the requested tool.** The SDK dispatches the call to its PHP tool class. The tool validates the arguments and asks `WeatherService` to retrieve and normalize the data through `OpenMeteoClient`.
+4. **The result goes back to the model.** The SDK adds the tool result to the conversation and asks the model to produce a user-friendly response. For comparisons, PHP ranks the cities and calculates the result; the model is not trusted to do the arithmetic.
+5. **The answer streams to the browser.** `WeatherChat` maps SDK output to the app's small SSE event format. The browser renders the answer and shows which tool ran.
+
+The model can request another tool if needed; the SDK continues the loop until it receives a final answer. Expected problems such as an unknown city are returned as short tool results the model can explain. Unexpected exceptions are allowed to propagate so failures are visible in logs rather than disguised as weather answers.
+
 ### The tools
 
 | Tool | Use it for | Input |
@@ -84,6 +106,13 @@ php artisan serve
 ```
 
 Open <http://localhost:8000>. If Ollama runs on another machine, set `OLLAMA_URL` in `.env` to that server's address.
+
+For Windows PowerShell, use these equivalents for the copy and SQLite-file steps:
+
+```powershell
+Copy-Item .env.example .env
+New-Item database\database.sqlite -ItemType File
+```
 
 **WAMP / Apache:** put the project in `www`, point a virtual host at the `public/` folder, and make sure `.env` and `database/database.sqlite` are writable by PHP. `php artisan serve` works too.
 
